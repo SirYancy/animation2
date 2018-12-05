@@ -24,12 +24,12 @@ GLuint vao, vbo;
 
 std::vector<float> dataBuffer;
 
-const char *model = "../models/sphere.dae";
+const char *model = "../models/spaceman.dae";
 
 const char *vertfn = "../shaders/vert.glsl";
 const char *fragfn = "../shaders/frag.glsl";
 
-const char *bricktexfn = "../textures/brick.bmp";
+const char *texfn = "../textures/spaceman.bmp";
 
 int LoadShader(const char *filename, GLuint shaderID);
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
     CreateBuffers(geometry);
 
     GLuint brickTex;
-    LoadTexture(GL_TEXTURE0, &brickTex, bricktexfn, "brick", 0);
+    LoadTexture(GL_TEXTURE0, &brickTex, texfn, "brick", 0);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -130,8 +130,8 @@ int main(int argc, char *argv[]) {
         glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
 
         glm::mat4 view = glm::lookAt(
-                glm::vec3(0.0f, -8.f, 0.0f),
-                glm::vec3(0.0f, 0.0f, 0.0f),
+                glm::vec3(0.0f, -20.f, 4.0f),
+                glm::vec3(0.0f, 0.0f, 4.0f),
                 glm::vec3(0.0f, 0.0f, 1.0f));
         GLint uniView = glGetUniformLocation(shaderProgram, "view");
         glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
@@ -200,6 +200,7 @@ void CreateBuffers(Geometry *g) {
 }
 
 void LoadTexture(GLenum texture, GLuint *id, const char *filename, const char *samplerID, const int index) {
+    glUseProgram(shaderProgram);
 
     SDL_Surface *surface = SDL_LoadBMP(filename);
     if (surface == nullptr) {
